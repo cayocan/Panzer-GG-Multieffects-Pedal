@@ -85,6 +85,8 @@ void PanzerGGProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     auto state = apvts.copyState();
     std::unique_ptr<juce::XmlElement> xml (state.createXml());
+    modeManager.syncToApvts (apvts);
+    xml->addChildElement (presetManager.createXml().release());
     copyXmlToBinary (*xml, destData);
 }
 
@@ -95,6 +97,8 @@ void PanzerGGProcessor::setStateInformation (const void* data, int sizeInBytes)
     {
         apvts.replaceState (juce::ValueTree::fromXml (*xml));
         modeManager.syncFromApvts (apvts);
+        if (auto* pb = xml->getChildByName ("PresetBank"))
+            presetManager.loadFromXml (*pb);
     }
 }
 

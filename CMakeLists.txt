@@ -51,6 +51,7 @@ target_sources(PanzerGG
         src/dsp/ReverbProcessor.cpp
         src/dsp/IrCabProcessor.cpp
         src/logic/ModeManager.cpp
+        src/logic/PresetManager.cpp
 )
 
 target_include_directories(PanzerGG
@@ -93,7 +94,9 @@ target_sources(PanzerGGTests
         src/dsp/ReverbProcessor.cpp
         src/dsp/IrCabProcessor.cpp
         src/logic/ModeManager.cpp
+        src/logic/PresetManager.cpp
         tests/ModeManagerTest.cpp
+        tests/PresetManagerTest.cpp
 )
 target_include_directories(PanzerGGTests PRIVATE src/)
 target_compile_definitions(PanzerGGTests PRIVATE JUCE_UNIT_TESTS=1)
