@@ -1,4 +1,5 @@
 #include "PluginProcessor.h"
+#include <BinaryData.h>
 
 using namespace PanzerGGParameters;
 
@@ -22,6 +23,15 @@ PanzerGGProcessor::PanzerGGProcessor()
               apvts.getRawParameterValue (ID::rvbMix))
     , irCab  (apvts.getRawParameterValue (ID::irSlot))
 {
+    // Register all 8 IR slots from BinaryData
+    irCab.registerSlotData (1, BinaryData::ir_01_bright_wav,   BinaryData::ir_01_bright_wavSize);
+    irCab.registerSlotData (2, BinaryData::ir_02_warm_wav,     BinaryData::ir_02_warm_wavSize);
+    irCab.registerSlotData (3, BinaryData::ir_03_midscoop_wav, BinaryData::ir_03_midscoop_wavSize);
+    irCab.registerSlotData (4, BinaryData::ir_04_vintage_wav,  BinaryData::ir_04_vintage_wavSize);
+    irCab.registerSlotData (5, BinaryData::ir_05_room_wav,     BinaryData::ir_05_room_wavSize);
+    irCab.registerSlotData (6, BinaryData::ir_06_tight_wav,    BinaryData::ir_06_tight_wavSize);
+    irCab.registerSlotData (7, BinaryData::ir_07_heavy_wav,    BinaryData::ir_07_heavy_wavSize);
+    irCab.registerSlotData (8, BinaryData::ir_08_american_wav, BinaryData::ir_08_american_wavSize);
 }
 
 void PanzerGGProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)

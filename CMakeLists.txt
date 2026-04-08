@@ -10,6 +10,19 @@ set(JUCE_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(extern/JUCE)
 
+# ── IR cabinet impulse responses (BinaryData) ─────────────────────
+juce_add_binary_data(PanzerGGIRs
+    SOURCES
+        assets/irs/ir_01_bright.wav
+        assets/irs/ir_02_warm.wav
+        assets/irs/ir_03_midscoop.wav
+        assets/irs/ir_04_vintage.wav
+        assets/irs/ir_05_room.wav
+        assets/irs/ir_06_tight.wav
+        assets/irs/ir_07_heavy.wav
+        assets/irs/ir_08_american.wav
+)
+
 juce_add_plugin(PanzerGG
     COMPANY_NAME                "PanzerGG"
     COMPANY_WEBSITE             ""
@@ -57,6 +70,7 @@ target_link_libraries(PanzerGG
     PRIVATE
         juce::juce_audio_utils
         juce::juce_dsp
+        PanzerGGIRs
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
