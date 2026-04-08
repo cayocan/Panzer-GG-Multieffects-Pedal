@@ -37,6 +37,7 @@ target_sources(PanzerGG
         src/dsp/DelayProcessor.cpp
         src/dsp/ReverbProcessor.cpp
         src/dsp/IrCabProcessor.cpp
+        src/logic/ModeManager.cpp
 )
 
 target_include_directories(PanzerGG
@@ -77,6 +78,8 @@ target_sources(PanzerGGTests
         src/dsp/DelayProcessor.cpp
         src/dsp/ReverbProcessor.cpp
         src/dsp/IrCabProcessor.cpp
+        src/logic/ModeManager.cpp
+        tests/ModeManagerTest.cpp
 )
 target_include_directories(PanzerGGTests PRIVATE src/)
 target_compile_definitions(PanzerGGTests PRIVATE JUCE_UNIT_TESTS=1)

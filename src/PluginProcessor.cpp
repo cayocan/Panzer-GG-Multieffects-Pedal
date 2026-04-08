@@ -49,14 +49,22 @@ void PanzerGGProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 {
     juce::ScopedNoDenormals noDenormals;
 
-    gate  .process (buffer);
-    amp   .process (buffer);
-    mod   .process (buffer);
-    delay .process (buffer);
-    reverb.process (buffer);
-    irCab .process (buffer);
+    if (modeManager.isTotalBypass())
+    {
+        buffer.clear();   // tuner mutes output; PRESET bypass = silence
+        return;
+    }
 
-    // Master volume — always active, applied after the full chain
+    gate.process (buffer);
+
+    if (modeManager.isAmpOn())    amp   .process (buffer);
+    if (modeManager.isModOn())    mod   .process (buffer);
+    if (modeManager.isDelayOn())  delay .process (buffer);
+    if (modeManager.isReverbOn()) reverb.process (buffer);
+
+    irCab.process (buffer);
+
+    // Master volume — always active
     const float masterGain = juce::jmap (
         apvts.getRawParameterValue (PanzerGGParameters::ID::master)->load(),
         0.f, 100.f, 0.f, 1.5f);
@@ -74,7 +82,10 @@ void PanzerGGProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     std::unique_ptr<juce::XmlElement> xml (getXmlFromBinary (data, sizeInBytes));
     if (xml != nullptr && xml->hasTagName (apvts.state.getType()))
+    {
         apvts.replaceState (juce::ValueTree::fromXml (*xml));
+        modeManager.syncFromApvts (apvts);
+    }
 }
 
 juce::AudioProcessorEditor* PanzerGGProcessor::createEditor()

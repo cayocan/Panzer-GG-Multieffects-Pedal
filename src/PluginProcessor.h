@@ -7,6 +7,7 @@
 #include "dsp/DelayProcessor.h"
 #include "dsp/ReverbProcessor.h"
 #include "dsp/IrCabProcessor.h"
+#include "logic/ModeManager.h"
 
 class PanzerGGProcessor : public juce::AudioProcessor
 {
@@ -42,6 +43,7 @@ public:
 
     //==============================================================================
     juce::AudioProcessorValueTreeState apvts;
+    ModeManager modeManager;
 
 private:
     // DSP chain — declaration order matches initialization order
