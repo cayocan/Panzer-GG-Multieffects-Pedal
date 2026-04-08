@@ -31,6 +31,12 @@ target_sources(PanzerGG
     PRIVATE
         src/PluginProcessor.cpp
         src/PluginEditor.cpp
+        src/dsp/GateProcessor.cpp
+        src/dsp/AmpProcessor.cpp
+        src/dsp/ModProcessor.cpp
+        src/dsp/DelayProcessor.cpp
+        src/dsp/ReverbProcessor.cpp
+        src/dsp/IrCabProcessor.cpp
 )
 
 target_include_directories(PanzerGG
@@ -61,11 +67,22 @@ juce_add_console_app(PanzerGGTests
     PRODUCT_NAME "PanzerGG Tests"
 )
 
-target_sources(PanzerGGTests PRIVATE tests/ParameterTests.cpp)
+target_sources(PanzerGGTests
+    PRIVATE
+        tests/ParameterTests.cpp
+        tests/ProcessorSmokeTest.cpp
+        src/dsp/GateProcessor.cpp
+        src/dsp/AmpProcessor.cpp
+        src/dsp/ModProcessor.cpp
+        src/dsp/DelayProcessor.cpp
+        src/dsp/ReverbProcessor.cpp
+        src/dsp/IrCabProcessor.cpp
+)
 target_include_directories(PanzerGGTests PRIVATE src/)
 target_compile_definitions(PanzerGGTests PRIVATE JUCE_UNIT_TESTS=1)
 target_link_libraries(PanzerGGTests
     PRIVATE
         juce::juce_audio_processors
+        juce::juce_dsp
         juce::juce_recommended_warning_flags
 )
