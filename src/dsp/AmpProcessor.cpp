@@ -17,16 +17,18 @@ AmpProcessor::AmpProcessor (std::atomic<float>* ampType,
 {
 }
 
-void AmpProcessor::prepare (double sr, int)
+void AmpProcessor::prepare (double sr, int blockSize)
 {
-    sampleRate = sr;
+    sampleRate = sr * 2.0;   // EQ operates at oversampled rate
     cachedBass = cachedMiddle = cachedTreble = -9999.f; // force first update
+    oversampling.initProcessing ((size_t) blockSize);
     updateEQIfChanged (50.f, 50.f, 50.f);               // init with flat EQ
     reset();
 }
 
 void AmpProcessor::reset()
 {
+    oversampling.reset();
     for (int ch = 0; ch < kMaxChannels; ++ch)
     {
         bassFilters  [ch].reset();
@@ -125,13 +127,16 @@ void AmpProcessor::process (juce::AudioBuffer<float>& buffer)
     const float outputGain = juce::jmap (vol, 0.f, 100.f, 0.f, 1.5f);
 
     const int numCh = juce::jmin (buffer.getNumChannels(), kMaxChannels);
-    const int numSamples = buffer.getNumSamples();
+
+    juce::dsp::AudioBlock<float> inputBlock (buffer);
+    auto oversampledBlock = oversampling.processSamplesUp (inputBlock);
+
+    const int numOsSamples = (int) oversampledBlock.getNumSamples();
 
     for (int ch = 0; ch < numCh; ++ch)
     {
-        auto* data = buffer.getWritePointer (ch);
-
-        for (int s = 0; s < numSamples; ++s)
+        auto* data = oversampledBlock.getChannelPointer (ch);
+        for (int s = 0; s < numOsSamples; ++s)
         {
             float x = waveshape (data[s] * preGain, type);
             x = bassFilters  [ch].processSample (x);
@@ -140,4 +145,6 @@ void AmpProcessor::process (juce::AudioBuffer<float>& buffer)
             data[s] = x * outputGain;
         }
     }
+
+    oversampling.processSamplesDown (inputBlock);
 }

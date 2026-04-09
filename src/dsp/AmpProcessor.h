@@ -40,4 +40,10 @@ private:
 
     void  updateEQIfChanged (float t, float m, float b);
     static float waveshape (float x, int type);
+
+    juce::dsp::Oversampling<float> oversampling {
+        kMaxChannels,
+        1,   // 2^1 = 2x
+        juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR,
+        true };
 };
