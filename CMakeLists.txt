@@ -40,6 +40,8 @@ juce_add_plugin(PanzerGG
     VST3_CATEGORIES             "Fx" "Distortion"
 )
 
+juce_generate_juce_header(PanzerGG)
+
 target_sources(PanzerGG
     PRIVATE
         src/PluginProcessor.cpp

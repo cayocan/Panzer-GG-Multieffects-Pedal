@@ -1,4 +1,5 @@
 #include "PluginProcessor.h"
+#include "PluginEditor.h"
 #include <BinaryData.h>
 
 using namespace PanzerGGParameters;
@@ -104,7 +105,7 @@ void PanzerGGProcessor::setStateInformation (const void* data, int sizeInBytes)
 
 juce::AudioProcessorEditor* PanzerGGProcessor::createEditor()
 {
-    return nullptr;
+    return new PanzerGGEditor (*this);
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
